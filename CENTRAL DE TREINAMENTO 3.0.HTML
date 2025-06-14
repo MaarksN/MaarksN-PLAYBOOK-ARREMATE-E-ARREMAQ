@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia de Repassadores 3.0 | Ferramentas de IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Variáveis de Cores e Fontes */
+        :root {
+            --aa-green: #16B097;
+            --aa-dark-blue: #1C2E42;
+            --aa-white: #FFFFFF;
+            --aa-green-darker: #0F8A7E;
+            --aa-green-lighter: #D2F3EC;
+            --aa-green-pastel: #f0fdfa;
+            --arremaq-orange: #FF8C00;
+            --arremaq-orange-darker: #D97706;
+            --arremaq-orange-lighter: #FFD073;
+            --arremaq-orange-pastel: #fffbeb;
+            
+            --font-primary-portal: 'Manrope', sans-serif;
+            --font-headings-portal: 'Sora', sans-serif;
+            --font-special-animation: 'Poppins', sans-serif;
+
+            --bg-main-light: var(--aa-green-pastel); 
+            --bg-main-dark: #0a121c; 
+            --bg-content-light-portal: var(--aa-white);
+            --bg-content-dark-portal: #1e293b;
+            --bg-interactive-light-portal: #EDF2F7;
+            --bg-interactive-dark-portal: #2D3748;
+
+            --text-headings-light-portal: var(--aa-dark-blue);
+            --text-headings-dark-portal: #E2E8F0;
+            --text-body-light-portal: #4A5568;
+            --text-body-dark-portal: #CBD5E0;
+            --text-muted-light-portal: #718096;
+            --text-muted-dark-portal: #A0AEC0;
+
+            --border-color-light-portal: #e2e8f0; 
+            --border-color-dark-portal: #334155;
+
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.03);
+            
+            --radius-lg: 0.75rem;
+            --radius-card-portal: 1.25rem;
+            --radius-button-portal: 0.75rem;
+            --transition-main: .3s cubic-bezier(.4,0,.2,1);
+        }
+        
+        html[data-theme='dark'] :root {
+            /* Adaptações para o tema escuro */
+        }
+        
+        /* Estilo Base */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font-primary-portal);
+            background-color: var(--bg-main-light);
+            color: var(--text-body-light-portal);
+            margin: 0;
+            overflow-x: hidden;
+        }
+        html[data-theme='dark'] body {
+            background-color: var(--bg-main-dark);
+            color: var(--text-body-dark-portal);
+        }
+
+        /* Header */
+        .global-header {
+            background-color: var(--bg-content-light-portal);
+            box-shadow: var(--shadow-md);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        html[data-theme='dark'] .global-header {
+            background-color: var(--bg-content-dark-portal);
+        }
+
+        /* Botões do Header */
+        .header-btn {
+            background-color: var(--bg-interactive-light-portal);
+            border: 1px solid var(--border-color-light-portal);
+            color: var(--text-muted-light-portal);
+            padding: 0.6rem; border-radius: 50%;
+            transition: all var(--transition-main);
+            cursor: pointer;
+        }
+        .header-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+            color: var(--aa-green);
+        }
+        html[data-theme='dark'] .header-btn {
+            background-color: var(--bg-interactive-dark-portal);
+            border-color: var(--border-color-dark-portal);
+            color: var(--text-muted-dark-portal);
+        }
+        html[data-theme='dark'] .header-btn:hover {
+            color: var(--aa-green-lighter);
+        }
+        .voice-toggle.listening {
+            color: var(--aa-green-darker);
+            border-color: var(--aa-green-darker);
+            animation: pulse 1.5s infinite;
+        }
+        html[data-theme='dark'] .voice-toggle.listening {
+            color: var(--aa-green-lighter);
+            border-color: var(--aa-green-lighter);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(22, 176, 151, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(22, 176, 151, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(22, 176, 151, 0); }
+        }
+
+        /* Títulos de Seção */
+        .section-title {
+            font-family: var(--font-headings-portal);
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--text-headings-light-portal);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        html[data-theme='dark'] .section-title {
+            color: var(--text-headings-dark-portal);
+        }
+        .section-title .icon { color: var(--aa-green); }
+        html[data-theme='dark'] .section-title .icon { color: var(--aa-green-lighter); }
+        
+        /* Estilos do Chatbot */
+        #chatbot-container {
+            background-color: var(--bg-content-light-portal);
+            border-radius: var(--radius-card-portal);
+            box-shadow: var(--shadow-lg);
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+        }
+        html[data-theme='dark'] #chatbot-container {
+            background-color: var(--bg-content-dark-portal);
+        }
+        #chat-window {
+            height: 400px;
+            border: 1px solid var(--border-color-light-portal);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        html[data-theme='dark'] #chat-window {
+            border-color: var(--border-color-dark-portal);
+        }
+        .chat-message {
+            margin-bottom: 0.75rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-message.user { align-items: flex-end; }
+        .chat-message.ai { align-items: flex-start; }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            line-height: 1.5;
+        }
+        .chat-bubble.user {
+            background-color: var(--aa-green);
+            color: var(--aa-white);
+            border-bottom-right-radius: 0.25rem;
+        }
+        .chat-bubble.ai {
+            background-color: var(--bg-interactive-light-portal);
+            color: var(--text-body-light-portal);
+            border: 1px solid var(--border-color-light-portal);
+            border-bottom-left-radius: 0.25rem;
+        }
+        html[data-theme='dark'] .chat-bubble.ai {
+            background-color: var(--bg-interactive-dark-portal);
+            color: var(--text-body-dark-portal);
+            border-color: var(--border-color-dark-portal);
+        }
+        #chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #chat-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border-radius: var(--radius-button-portal);
+            border: 1px solid var(--border-color-light-portal);
+        }
+        html[data-theme='dark'] #chat-input {
+            background-color: var(--bg-interactive-dark-portal);
+            border-color: var(--border-color-dark-portal);
+            color: var(--text-body-dark-portal);
+        }
+        #send-chat-btn {
+            background-color: var(--aa-green);
+            color: var(--aa-white);
+            border: none;
+            border-radius: var(--radius-button-portal);
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: background-color var(--transition-main);
+        }
+        #send-chat-btn:hover { background-color: var(--aa-green-darker); }
+        #send-chat-btn:disabled { background-color: var(--aa-medium-gray); cursor: not-allowed; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-aos-easing="ease-in-out" data-aos-duration="800" data-aos-delay="0">
+
+    <header id="main-portal-header" class="global-header">
+        <div class="container mx-auto flex items-center justify-between p-4">
+            <div class="font-bold text-lg">
+                <span style="color: var(--aa-green);">Academia</span> 3.0
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="voiceToggle" class="header-btn voice-toggle" aria-label="Ativar Comandos de Voz">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="themeTogglePortal" class="header-btn" aria-label="Alternar Modo Escuro">
+                    <i id="sunIconPortal" class="fas fa-sun hidden"></i>
+                    <i id="moonIconPortal" class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="academia-content-section" class="py-10">
+            <div class="container mx-auto px-4">
+                <h1 class="section-title" data-aos="fade-up">
+                    <i class="fas fa-brain icon"></i> Central de Ferramentas de IA
+                </h1>
+                <p class="text-center max-w-2xl mx-auto mb-10" data-aos="fade-up" data-aos-delay="100">
+                    Potencialize a sua produtividade. Gere conteúdo, automatize tarefas e simule cenários de vendas com o poder da inteligência artificial.
+                </p>
+
+                <!-- Seção do Chatbot -->
+                <div id="chatbot-container" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold" style="color: var(--text-headings-light-portal);">
+                            <i class="fas fa-comments" style="color: var(--aa-green);"></i> Assistente de Chat IA
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <label for="ai-model-select" class="text-sm font-medium">Motor:</label>
+                            <select id="ai-model-select" class="p-1 text-sm border rounded-md" style="background-color: var(--bg-interactive-light-portal); border-color: var(--border-color-light-portal);">
+                                <option value="gemini">Gemini</option>
+                                <option value="gpt">ChatGPT (Simulado)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="chat-window">
+                        <!-- As mensagens do chat serão inseridas aqui -->
+                    </div>
+                    <div id="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Digite a sua mensagem...">
+                        <button id="send-chat-btn" aria-label="Enviar mensagem">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                     <div class="text-right mt-4">
+                        <button id="save-chat-btn" class="text-sm py-2 px-4 rounded-lg transition-colors" style="background-color: var(--aa-green-lighter); color: var(--aa-green-darker);">
+                            <i class="fas fa-save mr-2"></i>Salvar Conversa
+                        </button>
+                    </div>
+                    <div id="chat-save-feedback" class="text-right text-sm mt-1"></div>
+                </div>
+
+                <!-- Outras Ferramentas de IA -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                    <!-- Card de Integração HubSpot -->
+                    <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-content-light-portal);" data-aos="fade-up">
+                        <h3 class="font-bold text-lg mb-2" style="color: #FF7A59;"><i class="fab fa-hubspot mr-2"></i>HubSpot</h3>
+                        <p class="text-sm mb-4">Crie workflows e sequências de e-mail para nutrição de leads.</p>
+                        <button class="w-full py-2 px-4 rounded-lg font-semibold transition-colors" style="background-color: #FF7A59; color: white;" onclick="alert('Funcionalidade de integração com HubSpot em desenvolvimento.')">Automatizar</button>
+                    </div>
+                    <!-- Card de Integração Jira -->
+                    <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-content-light-portal);" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="font-bold text-lg mb-2" style="color: #0052CC;"><i class="fab fa-jira mr-2"></i>Jira</h3>
+                        <p class="text-sm mb-4">Crie tarefas e histórias de utilizador automaticamente a partir de briefings.</p>
+                        <button class="w-full py-2 px-4 rounded-lg font-semibold transition-colors" style="background-color: #0052CC; color: white;" onclick="alert('Funcionalidade de integração com Jira em desenvolvimento.')">Criar Tarefa</button>
+                    </div>
+                    <!-- Card de Integração Slack -->
+                    <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-content-light-portal);" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="font-bold text-lg mb-2" style="color: #4A154B;"><i class="fab fa-slack mr-2"></i>Slack</h3>
+                        <p class="text-sm mb-4">Envie resumos de reuniões ou resultados de vendas para canais específicos.</p>
+                        <button class="w-full py-2 px-4 rounded-lg font-semibold transition-colors" style="background-color: #4A154B; color: white;" onclick="alert('Funcionalidade de integração com Slack em desenvolvimento.')">Publicar</button>
+                    </div>
+                    <!-- Card de Integração Google Workspace -->
+                    <div class="p-6 rounded-lg shadow-lg" style="background-color: var(--bg-content-light-portal);" data-aos="fade-up" data-aos-delay="300">
+                        <h3 class="font-bold text-lg mb-2" style="color: #4285F4;"><i class="fab fa-google mr-2"></i>Google Workspace</h3>
+                        <p class="text-sm mb-4">Crie rascunhos de e-mails, documentos ou apresentações com IA.</p>
+                        <button class="w-full py-2 px-4 rounded-lg font-semibold transition-colors" style="background-color: #4285F4; color: white;" onclick="alert('Funcionalidade de integração com Google Workspace em desenvolvimento.')">Criar Documento</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module">
+        // Importações do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfigFromHost = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const firebaseConfig = firebaseConfigFromHost ? JSON.parse(firebaseConfigFromHost) : {
+            apiKey: "YOUR_FALLBACK_API_KEY", 
+            authDomain: "YOUR_FALLBACK_AUTH_DOMAIN",
+            projectId: "YOUR_FALLBACK_PROJECT_ID",
+            storageBucket: "YOUR_FALLBACK_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_FALLBACK_MESSAGING_SENDER_ID",
+            appId: "YOUR_FALLBACK_APP_ID"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        setLogLevel('debug');
+
+        // Variáveis globais para o Firebase
+        window.db = db;
+        
+        let currentUserId = null;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+            } else {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    signInWithCustomToken(auth, __initial_auth_token).catch(err => signInAnonymously(auth));
+                } else {
+                    signInAnonymously(auth);
+                }
+            }
+        });
+
+        // Torna a função de salvar acessível globalmente
+        window.saveChatHistoryToFirestore = async function(conversationHistory) {
+            if (!currentUserId || conversationHistory.length === 0) {
+                return { success: false, message: "Nada para salvar ou utilizador não autenticado." };
+            }
+            try {
+                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                 await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/chat_histories`), {
+                    history: conversationHistory,
+                    createdAt: serverTimestamp()
+                 });
+                 return { success: true, message: "Conversa salva com sucesso!" };
+            } catch(error) {
+                 console.error("Erro ao salvar a conversa:", error);
+                 return { success: false, message: "Erro ao salvar a conversa." };
+            }
+        }
+    </script>
+    <script>
+        // Lógica da Aplicação
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init();
+            
+            // --- Lógica do Chatbot ---
+            const chatWindow = document.getElementById('chat-window');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatBtn = document.getElementById('send-chat-btn');
+            const saveChatBtn = document.getElementById('save-chat-btn');
+            const chatSaveFeedback = document.getElementById('chat-save-feedback');
+            const aiModelSelect = document.getElementById('ai-model-select');
+            let conversationHistory = [];
+
+            function addMessageToChat(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}`;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = `chat-bubble ${sender}`;
+                bubbleDiv.textContent = message;
+
+                messageDiv.appendChild(bubbleDiv);
+                chatWindow.appendChild(messageDiv);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            async function handleSendMessage() {
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                addMessageToChat(userMessage, 'user');
+                conversationHistory.push({ role: "user", parts: [{ text: userMessage }] });
+                chatInput.value = '';
+                sendChatBtn.disabled = true;
+                addMessageToChat('A pensar...', 'ai');
+
+                try {
+                    const aiResponse = await callAIApi(conversationHistory);
+                    // Remove "A pensar..."
+                    chatWindow.removeChild(chatWindow.lastChild); 
+                    addMessageToChat(aiResponse, 'ai');
+                    conversationHistory.push({ role: "model", parts: [{ text: aiResponse }] });
+                } catch (error) {
+                    console.error("Erro na API do Chat:", error);
+                     chatWindow.removeChild(chatWindow.lastChild); 
+                    addMessageToChat("Desculpe, ocorreu um erro ao comunicar com a IA.", 'ai');
+                } finally {
+                    sendChatBtn.disabled = false;
+                }
+            }
+
+            async function callAIApi(history) {
+                const apiKey = ""; // Chave da API, deixada em branco conforme instruções
+                const selectedModel = aiModelSelect.value === 'gpt' ? 'gemini-1.5-flash' : 'gemini-1.5-pro-preview';
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey}`;
+
+                const payload = { contents: history };
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message);
+                }
+
+                const result = await response.json();
+                return result.candidates[0].content.parts[0].text;
+            }
+            
+            async function saveChatHistory() {
+                const result = await window.saveChatHistoryToFirestore(conversationHistory);
+                chatSaveFeedback.textContent = result.message;
+                chatSaveFeedback.style.color = result.success ? 'green' : 'red';
+                setTimeout(() => { chatSaveFeedback.textContent = '' }, 3000);
+            }
+
+            sendChatBtn.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSendMessage();
+            });
+            saveChatBtn.addEventListener('click', saveChatHistory);
+            
+            // --- Lógica de Comando de Voz ---
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'pt-BR';
+                recognition.continuous = false;
+                
+                const voiceToggle = document.getElementById('voiceToggle');
+                voiceToggle.addEventListener('click', () => {
+                    if (!voiceToggle.classList.contains('listening')) {
+                        recognition.start();
+                    } else {
+                        recognition.stop();
+                    }
+                });
+
+                recognition.onstart = () => voiceToggle.classList.add('listening');
+                recognition.onend = () => voiceToggle.classList.remove('listening');
+                recognition.onerror = (event) => console.error('Erro no reconhecimento de voz:', event.error);
+                
+                recognition.onresult = (event) => {
+                    const command = event.results[0][0].transcript.toLowerCase();
+                    console.log(`Comando de voz recebido: ${command}`);
+                    
+                    if (command.includes("enviar mensagem") || command.includes("mandar mensagem")) {
+                        handleSendMessage();
+                    } else if (command.includes("limpar chat")) {
+                        chatWindow.innerHTML = '';
+                        conversationHistory = [];
+                    } else if (command.includes("salvar conversa")) {
+                        saveChatHistory();
+                    } else {
+                        console.log("Comando de voz não reconhecido.");
+                    }
+                };
+            } else {
+                console.warn("API de Reconhecimento de Voz não suportada.");
+                document.getElementById('voiceToggle').style.display = 'none';
+            }
+
+            // Theme Toggle Logic
+            const themeTogglePortalBtn = document.getElementById('themeTogglePortal');
+            const sunIconPortal = document.getElementById('sunIconPortal');
+            const moonIconPortal = document.getElementById('moonIconPortal');
+
+            function applyTheme(theme, manualToggle = false) {
+                document.documentElement.setAttribute('data-theme', theme);
+                let isDarkMode = theme === 'dark';
+                if (sunIconPortal && moonIconPortal) {
+                    sunIconPortal.style.display = isDarkMode ? 'block' : 'none';
+                    moonIconPortal.style.display = isDarkMode ? 'none' : 'block';
+                }
+                if (manualToggle) {
+                    try {
+                        localStorage.setItem('theme', theme);
+                    } catch (e) { console.warn("LocalStorage não disponível para salvar o tema."); }
+                }
+            }
+            let currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(currentTheme);
+
+            if (themeTogglePortalBtn) {
+                themeTogglePortalBtn.addEventListener('click', () => {
+                    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
